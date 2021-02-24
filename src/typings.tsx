@@ -12,3 +12,9 @@ export interface TreeData {
 export interface Props {
   data: TreeData;
 }
+export interface State {
+  data: TreeData;
+}
+export interface keyToNodeMap {
+  [key: string]: TreeData;
+}
