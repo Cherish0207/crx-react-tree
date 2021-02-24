@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {  
-    "build": "webpack"
+  "scripts": {
+    "build": "webpack",
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
