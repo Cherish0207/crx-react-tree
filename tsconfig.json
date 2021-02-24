@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "es5", // 把源代码变成es5 默认es3
+    "module": "commonjs", // module规范
+    "jsx": "react", // jsx怎么处理 把jsx成React.CreateElement
+    "outDir":"./dist", //输出目录
+    "rootDir":"./src",//根目录
+    "noImplicitAny":true,//不允许默认的any类型 any script
+    "esModuleInterop":true,//实现common模块和的es6的转换
+  },
+  "include": [
+    "./src/**/*", //编译这个目录的文件
+    "./typings/**/*",//类型声明文件类型约束
+  ]
+}
