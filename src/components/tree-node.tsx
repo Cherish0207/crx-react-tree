@@ -10,7 +10,7 @@ class TreeNode extends React.Component<Props> {
   }
   render() {
     let {
-      data: { name, children, collapsed = false, key },
+      data: { name, children, collapsed = false, checked = false, key },
     } = this.props;
     let caret, icon;
     if (children) {
@@ -40,6 +40,11 @@ class TreeNode extends React.Component<Props> {
         <div className="inner">
           {caret}
           <span className="content">
+            <input
+              type="checkbox"
+              checked={checked}
+              onChange={() => this.props.onCheck(key)}
+            />
             <img style={{ width: 20 }} src={icon} />
             {name}
           </span>
@@ -48,6 +53,7 @@ class TreeNode extends React.Component<Props> {
           <div className="children">
             {children.map((item: TreeData) => (
               <TreeNode
+                onCheck={this.props.onCheck}
                 onCollapse={this.props.onCollapse}
                 key={item.key}
                 data={item}
