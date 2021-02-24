@@ -8,8 +8,9 @@ class Tree extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = { data: this.props.data };
+  }
+  componentDidMount() {
     this.buildKeyMap();
-    console.log(this.keyToNodeMap);
   }
   buildKeyMap = () => {
     const data = this.state.data;
@@ -18,6 +19,7 @@ class Tree extends React.Component<Props, State> {
     if (data.children && data.children.length > 0) {
       this.walk(data.children);
     }
+    this.setState({ data: this.state.data });
   };
   walk = (children: TreeData[]) => {
     children.forEach((item: TreeData) => {
@@ -27,11 +29,19 @@ class Tree extends React.Component<Props, State> {
       }
     });
   };
+  onCollapse = (key: string) => {
+    let data = this.keyToNodeMap[key];
+    if (data) {
+      data.collapsed = !data.collapsed;
+      data.children = data.children || []; // 后面会改成懒加载
+      this.buildKeyMap();
+    }
+  };
   render() {
     return (
       <div className="tree">
         <div className="tree-nodes">
-          <TreeNode data={this.props.data} />
+          <TreeNode onCollapse={this.onCollapse} data={this.props.data} />
         </div>
       </div>
     );

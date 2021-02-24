@@ -10,17 +10,48 @@ class TreeNode extends React.Component<Props> {
   }
   render() {
     let {
-      data: { name, children },
+      data: { name, children, collapsed = false, key },
     } = this.props;
+    let caret, icon;
+    if (children) {
+      if (children.length > 0) {
+        caret = (
+          <span
+            className={`collapse ${collapsed ? "caret-right" : "caret-down"}`}
+            onClick={() => this.props.onCollapse(key)}
+          />
+        );
+        icon = collapsed ? closedFolder : openedFolder;
+      } else {
+        caret = null;
+        icon = file;
+      }
+    } else {
+      caret = (
+        <span
+          className={`collapse caret-right`}
+          onClick={() => this.props.onCollapse(key)}
+        />
+      );
+      icon = closedFolder;
+    }
     return (
       <div className="tree-node">
         <div className="inner">
-          <span className="content">{name}</span>
+          {caret}
+          <span className="content">
+            <img style={{ width: 20 }} src={icon} />
+            {name}
+          </span>
         </div>
-        {children && children.length > 0 && (
+        {children && children.length > 0 && !collapsed && (
           <div className="children">
             {children.map((item: TreeData) => (
-              <TreeNode key={item.key} data={item} />
+              <TreeNode
+                onCollapse={this.props.onCollapse}
+                key={item.key}
+                data={item}
+              />
             ))}
           </div>
         )}
