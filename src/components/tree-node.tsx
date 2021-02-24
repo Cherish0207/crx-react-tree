@@ -1,5 +1,8 @@
 import React from "react";
 import { TreeData, Props } from "../typings";
+import closedFolder from "../assets/closed-folder.png";
+import file from "../assets/file.png";
+import openedFolder from "../assets/opened-folder.png";
 
 class TreeNode extends React.Component<Props> {
   constructor(props: Props) {
@@ -11,7 +14,7 @@ class TreeNode extends React.Component<Props> {
     } = this.props;
     return (
       <div className="tree-node">
-        <div className="inner"> 
+        <div className="inner">
           <span className="content">{name}</span>
         </div>
         {children && children.length > 0 && (

@@ -3,7 +3,6 @@ import "./index.less";
 import { TreeData, Props, State, keyToNodeMap } from "../typings";
 import TreeNode from "./tree-node";
 
-
 class Tree extends React.Component<Props, State> {
   keyToNodeMap: keyToNodeMap;
   constructor(props: Props) {
@@ -11,7 +10,6 @@ class Tree extends React.Component<Props, State> {
     this.state = { data: this.props.data };
     this.buildKeyMap();
     console.log(this.keyToNodeMap);
-    
   }
   buildKeyMap = () => {
     const data = this.state.data;
