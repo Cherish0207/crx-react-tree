@@ -2,7 +2,7 @@ import React from "react";
 import "./index.less";
 import { TreeData, Props, State, keyToNodeMap } from "../typings";
 import TreeNode from "./tree-node";
-
+import { getChildren } from "../api";
 class Tree extends React.Component<Props, State> {
   keyToNodeMap: keyToNodeMap;
   constructor(props: Props) {
@@ -30,12 +30,28 @@ class Tree extends React.Component<Props, State> {
       }
     });
   };
-  onCollapse = (key: string) => {
+  onCollapse = async (key: string) => {
     let data = this.keyToNodeMap[key];
     if (data) {
-      data.collapsed = !data.collapsed;
-      data.children = data.children || []; // 后面会改成懒加载
-      this.buildKeyMap();
+      if (!data.children) {
+        data.loading = true;
+        this.buildKeyMap();
+        this.setState({ data: this.state.data });
+        let result = await getChildren(data);
+        if (result.code == 0) {
+          data.children = result.data;
+          data.collapsed = false;
+          data.loading = false;
+          this.buildKeyMap();
+          this.setState({ data: this.state.data });
+        } else {
+          alert("加载失败");
+        }
+      } else {
+        // 如果没有 children属性,则说明儿子未加载,需要加载
+        data.collapsed = !data.collapsed;
+        this.setState({ data: this.state.data });
+      }
     }
   };
   onCheck = (key: string) => {
