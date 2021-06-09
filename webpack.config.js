@@ -10,6 +10,7 @@ module.exports = {
   devtool: "source-map",
   devServer: {
     hot: true,
+    port: 8001,
     contentBase: path.join(__dirname, "dist"),
     historyApiFallback: {
       //重定向
