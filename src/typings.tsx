@@ -15,9 +15,12 @@ export interface Props {
   data: TreeData;
   onCollapse: collapse;
   onCheck: Check;
+  setFromNode: SetFromNode;
+  onMove: OnMove;
 }
 export interface State {
   data: TreeData;
+  fromNode?: TreeData;
 }
 export interface keyToNodeMap {
   [key: string]: TreeData;
@@ -27,4 +30,10 @@ export interface collapse {
 }
 export interface Check {
   (key: string): void;
+}
+export interface SetFromNode {
+  (key: TreeData): void;
+}
+export interface OnMove {
+  (key: TreeData): void;
 }

@@ -7,7 +7,7 @@ class Tree extends React.Component<Props, State> {
   keyToNodeMap: keyToNodeMap;
   constructor(props: Props) {
     super(props);
-    this.state = { data: this.props.data };
+    this.state = { data: this.props.data, fromNode: null };
   }
   componentDidMount() {
     this.buildKeyMap();
@@ -35,7 +35,7 @@ class Tree extends React.Component<Props, State> {
     if (data) {
       if (!data.children) {
         data.loading = true;
-        this.buildKeyMap();
+        // this.buildKeyMap();
         this.setState({ data: this.state.data });
         let result = await getChildren(data);
         if (result.code == 0) {
@@ -87,6 +87,21 @@ class Tree extends React.Component<Props, State> {
       this.checkChildren(item.children, checked);
     });
   };
+  setFromNode = (fromNode: TreeData) => {
+    this.setState({ ...this.state, fromNode });
+  };
+  onMove = (toNode: TreeData) => {
+    let fromNode = this.state.fromNode;
+    let fromChildren = fromNode.parent.children,
+      toChildren = toNode.parent.children;
+    let fromIndex = fromChildren.findIndex(
+      (item: TreeData) => item === fromNode
+    );
+    let toIndex = toChildren.findIndex((item) => item === toNode);
+    fromChildren.splice(fromIndex, 1, toNode);
+    toChildren.splice(toIndex, 1, fromNode);
+    this.buildKeyMap();
+  };
   render() {
     return (
       <div className="tree">
@@ -95,6 +110,8 @@ class Tree extends React.Component<Props, State> {
             onCheck={this.onCheck}
             onCollapse={this.onCollapse}
             data={this.props.data}
+            setFromNode={this.setFromNode}
+            onMove={this.onMove}
           />
         </div>
       </div>

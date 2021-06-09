@@ -6,8 +6,45 @@ import openedFolder from "../assets/opened-folder.png";
 import loadingSrc from "../assets/loading.gif";
 
 class TreeNode extends React.Component<Props> {
+  treeNodeRef: React.RefObject<HTMLDivElement>;
   constructor(props: Props) {
     super(props);
+    this.treeNodeRef = React.createRef();
+  }
+  componentDidMount() {
+    this.treeNodeRef.current.addEventListener(
+      "dragstart",
+      (event: DragEvent): void => {
+        this.props.setFromNode(this.props.data);
+        event.stopPropagation();
+      },
+      false
+    ); //useCapture=false
+    this.treeNodeRef.current.addEventListener(
+      "dragenter",
+      (event: DragEvent) => {
+        event.preventDefault();
+        event.stopPropagation();
+      },
+      false
+    );
+    this.treeNodeRef.current.addEventListener(
+      "dragover",
+      (event: DragEvent) => {
+        event.preventDefault();
+        event.stopPropagation();
+      },
+      false
+    );
+    this.treeNodeRef.current.addEventListener(
+      "drop",
+      (event: DragEvent) => {
+        event.preventDefault();
+        this.props.onMove(this.props.data);
+        event.stopPropagation();
+      },
+      false
+    );
   }
   render() {
     let {
@@ -50,7 +87,7 @@ class TreeNode extends React.Component<Props> {
       icon = closedFolder;
     }
     return (
-      <div className="tree-node">
+      <div className="tree-node" draggable={true} ref={this.treeNodeRef}>
         <div className="inner">
           {caret}
           <span className="content">
@@ -69,6 +106,8 @@ class TreeNode extends React.Component<Props> {
               <TreeNode
                 onCheck={this.props.onCheck}
                 onCollapse={this.props.onCollapse}
+                setFromNode={this.props.setFromNode}
+                onMove={this.props.onMove}
                 key={item.key}
                 data={item}
               />
